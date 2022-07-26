@@ -3,8 +3,9 @@
 import sys
 import os
 import time
+from math import ceil
 
-BUF_SIZE = 512
+BUF_SIZE = 1
 
 class Tail():
     def __init__(self, filename, n=10):
@@ -21,8 +22,11 @@ class Tail():
 
                 while True:
                     line = self._file.readline()
-                    if line: sys.stdout.write(line)
-                    else: time.sleep(1)
+                    if line:
+                        sys.stdout.write(line)
+                        sys.stdout.flush()
+                    else:
+                        time.sleep(1)
         except KeyboardInterrupt as e:
             print("Interrupted. Exiting")
             self._file.close()
@@ -69,13 +73,12 @@ class Tail():
                         bytes_to_read = bytes_to_read * self.n
                     else:
                         bytes_per_line = bytes_to_read/line_breaks      # since linebreaks is smaller then n, we calculate approx. bytes in each line and then multiply that with n to reach just above n lines
-                        bytes_to_read = round(bytes_per_line * self.n)
+                        bytes_to_read = ceil(bytes_per_line * self.n)
             time.sleep(1)       # sleep(1) just to visualize the bytes_to_read decision being taken during start
 
 
         sys.stdout.write('\n'.join(last_lines))
         sys.stdout.flush()
-        # sys.stdout.write('')
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
