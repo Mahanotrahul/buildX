@@ -58,7 +58,7 @@ class cp():
         print(sourcefile, target)
         while True:
             bytes_read = sf.read(BUF_SIZE)
-            if bytes_read == "":
+            if len(bytes_read) == 0:
                 break
             tf.write(bytes_read)
 
